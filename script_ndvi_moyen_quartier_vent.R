@@ -1,3 +1,5 @@
+## Réalisé par Maxime Paschal, maxime.paschal@gmail.com##
+
 #vider l'espace de travail
 rm(list=ls())
 
@@ -17,7 +19,7 @@ library(caret)
 library(FactoMineR)
 library(landscapemetrics)
 
-#répertorie de travail
+#rÃ©pertorie de travail
 
 WD="D:/Marans_S2_multidates/secteurs_vent_marans/juin_secteurs_vent_marans"
 setwd(WD)
@@ -28,7 +30,7 @@ carte=rast("D:/sentinel_serie_temporelle_ndvi_Marans/S2_marans_ndvi_moyen_mensue
 plot(carte)
 
 
-####################Découper les cartes par rapport aux quartiers de vent###############################
+####################DÃ©couper les cartes par rapport aux quartiers de vent###############################
 
 mask=st_read("D:/station_marans/mask_marans_champs.shp")
 mask=st_transform(mask,32630)
@@ -112,9 +114,9 @@ writeRaster(carte_nno,"S2_ndvi_juin_nno_marans.tif",datatype="FLT8S", overwrite=
 
 #####################Calculer les pourcentages d'OS par quartier de vent################################
 
-liste_metrics=list_lsm() # listes des métriques qui existent
+liste_metrics=list_lsm() # listes des mÃ©triques qui existent
 as.data.frame(liste_metrics)
-liste_metrics #afficher les métriques disponibles 
+liste_metrics #afficher les mÃ©triques disponibles 
 
 
 
@@ -141,7 +143,7 @@ Num_image=8#nbr image que tu as (secteurs de vent)
 
 vent=c("NNE", "ENE", "ESE", "SSE", "SSO", "OSO", "ONO", "NNO")
 
-mean_ndvi_df=NULL #attention entre plusieurs utilisations il faut remettre � 0 le r�sultats sinon �a s'accumule
+mean_ndvi_df=NULL #attention entre plusieurs utilisations il faut remettre à 0 le résultats sinon ça s'accumule
 
 for(i in 1:Num_image){
   im=liste_im[[i]]
@@ -155,7 +157,7 @@ for(i in 1:Num_image){
 
 as.data.frame(mean_ndvi_df[1:Num_image,])
 
-mean_ndvi_df # afficher le résultats 
+mean_ndvi_df # afficher le rÃ©sultats 
 row.names(mean_ndvi_df)=vent
 colnames(mean_ndvi_df)="ndvi_moyen"
 mean_ndvi_df
