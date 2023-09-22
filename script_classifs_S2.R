@@ -1,3 +1,5 @@
+## Réalisé par Maxime Paschal, maxime.paschal@gmail.com##
+
 #vider l'espace de travail
 rm(list=ls())
 .rs.restartR()
@@ -16,7 +18,7 @@ library(randomForest)
 library(caret)
 library(FactoMineR)
 
-#répertorie de travail
+#rÃ©pertorie de travail
 
 WD="D:/Esnandes_S2_multidates"
 setwd(WD)
@@ -39,7 +41,7 @@ Stack_im67=rast("esnandes_S2_20230607_stack_980.tif")
 
 #les bandes des dates
 
-#si on fait image [1] -> on acc�de au pixel qui a la position 1 par contre image[[1]] permet d'acc�der � la premi�re bande du stack
+#si on fait image [1] -> on accède au pixel qui a la position 1 par contre image[[1]] permet d'accéder à la première bande du stack
 
 
 B2_2=Stack_im2[[1]]
@@ -238,9 +240,9 @@ wavi_67=(1+L)*((NIR_67-B_67)/(NIR_67+B_67+L))
 
 
 
-## S�lection des variables##
+## Sélection des variables##
 
-# cr�er un stack avec l'image et les indices
+# créer un stack avec l'image et les indices
 
 
 many_rst=list(B7_2, B8_2, B8A_2, B11_2, B12_2, ndvi_2, B8_4, B8A_4, B11_4, B12_4, gndvi_4, arvi_4, B2_5, B5_5, B6_5, B8A_5, arvi_5, B8_65, B12_65, savi_65, B5_67, B6_67, B12_67, gndvi_67, savi_67)
@@ -268,7 +270,7 @@ crs(CLC_poly_AOI)
 CLC_poly_AOI=st_transform(CLC_poly_AOI,crs(Stack_im))
 
 
-CLC_poly_AOI=CLC_poly_AOI[,-1] #retirer le num�ro de l'�chantillon
+CLC_poly_AOI=CLC_poly_AOI[,-1] #retirer le numéro de l'échantillon
 
 names(CLC_poly_AOI)
 table(CLC_poly_AOI$classe)
@@ -279,12 +281,12 @@ table(CLC_poly_AOI$classe)
 table(CLC_poly_AOI$classe)
 
 # Extract les signatures spectrales des points
-#autre m�thode je retrouve � partir de mes points, les num�ros des pixels correspondants 
+#autre méthode je retrouve à partir de mes points, les numéros des pixels correspondants 
 
 ind_points= extract(Stack_im, CLC_poly_AOI)
 
 ind_points$classe= as.factor(CLC_poly_AOI$classe)                       
-Spectra_df=ind_points[,-1]   #retirer le num�ro de l'�chantillon
+Spectra_df=ind_points[,-1]   #retirer le numéro de l'échantillon
 names(Spectra_df)= c("B7_2", "B8_2", "B8A_2", "B11_2", "B12_2", "ndvi_2", "B8_4", "B8A_4", "B11_4", "B12_4", "gndvi_4", "arvi_4", "B2_5", "B5_5", "B6_5", "B8A_5", "arvi_5", "B8_65", "B12_65", "savi_65", "B5_67", "B6_67", "B12_67", "gndvi_67", "savi_67", "classe") 
 head(Spectra_df)
 dim(Spectra_df)
@@ -301,7 +303,7 @@ if (length(POSNA)>0) {
   Spectra_df=Spectra_df[-POSNA,]
 }
 dim(Spectra_df)
-# on a supprim� les points NA
+# on a supprimé les points NA
 
 # split du data set
 
@@ -316,7 +318,7 @@ str(Spectra_valid_df)
 cat("\t compute random forest model \n")
 #ligne juste pour afficher le message dans la console 
 
-##Spectra_train_df[,1:25] -> je travaille avec les variables 1 � 25 (la 26e est la classe)
+##Spectra_train_df[,1:25] -> je travaille avec les variables 1 à 25 (la 26e est la classe)
 
 #Tuning 
 Tune_RF<-tuneRF(Spectra_train_df[,1:25],Spectra_train_df$classe, ntreeTry = 200, stepFactor = 2, trace = FALSE, plot = FALSE,improve = 0.5, doBest = FALSE)
@@ -325,7 +327,7 @@ Tune_RF<-tuneRF(Spectra_train_df[,1:25],Spectra_train_df$classe, ntreeTry = 200,
 calib_RF = randomForest(Spectra_train_df[,1:25],Spectra_train_df$classe, data = Spectra_train_df, mtry = Tune_RF[which.min(Tune_RF[,2]),1], 
                         ntree=200, importance = TRUE, na.action=na.omit)
 
-plot(calib_RF$err.rate[,1], type = "l", xlab = "Tree number", ylab = "error OOB") #permet de savoir si le nombre d'arbre permet d'am�liorer la pr�cision
+plot(calib_RF$err.rate[,1], type = "l", xlab = "Tree number", ylab = "error OOB") #permet de savoir si le nombre d'arbre permet d'améliorer la précision
 
 
 # Retrieve important variables
@@ -343,15 +345,15 @@ varImpPlot(calib_RF)
 imp_var= importance(calib_RF, type=2)
 imp_var= order(imp_var, decreasing=TRUE)
 imp_var
-#permet de trier les varaibles les plus importantes poure lancer la classification qu'avec les variables qui nouys int�ressent le plus
-#une fois arriv� ici on peut relancer ce qu'on a fait avant mais en gardant que les variables qui nous int�resse le plus 
-#bien penser � modifier les Spectra_valid_df[,1:n] qui arrvient apr�s 
+#permet de trier les varaibles les plus importantes poure lancer la classification qu'avec les variables qui nouys intéressent le plus
+#une fois arrivé ici on peut relancer ce qu'on a fait avant mais en gardant que les variables qui nous intéresse le plus 
+#bien penser à modifier les Spectra_valid_df[,1:n] qui arrvient après 
 
-######penser � bien garder que les variables les plus explicatives en relan�ant ce qu'on a fait avant #####
+######penser à bien garder que les variables les plus explicatives en relançant ce qu'on a fait avant #####
 
 # predict and compute
 
-predic_RF= predict(calib_RF, Spectra_valid_df[,1:25], type="response") #penser � changer les variales avec lesquelles on travaille
+predic_RF= predict(calib_RF, Spectra_valid_df[,1:25], type="response") #penser à changer les variales avec lesquelles on travaille
 matrice_confusion=caret::confusionMatrix(predic_RF,Spectra_valid_df$classe)
 matrice_confusion
 
@@ -376,7 +378,7 @@ writeRaster(Classif_rf_im, "Classif_SRFj3_esnandes_0_9402.tif", datatype="INT2U"
 
 
 
-#récupérer les échantillons avec les valeurs spéctrales sous forme de csv 
+#rÃ©cupÃ©rer les Ã©chantillons avec les valeurs spÃ©ctrales sous forme de csv 
 
 csv=ind_points
 csv_scale=csv
@@ -388,10 +390,10 @@ write.csv(csv_scale, "SRFj_pts_extract_scale.csv", row.names=FALSE)
 # SI LA VERSION AU DESSUS FONCTIONNE PAS UTILISER CES ETAPES :
 
 # write.csv(ind_points, "SRFj_pts_extract.csv", row.names=FALSE)
-# #entre temps h'ouvre ce csv dans excel pour le réenregistrer en csv avec séparateur point virgule, peut être qu'on pourrait sauter cette étape
-# #on ferait juste une copie de nos échantillons et centre et réduit ça pour directement passer à la dernière étape
+# #entre temps h'ouvre ce csv dans excel pour le rÃ©enregistrer en csv avec sÃ©parateur point virgule, peut Ãªtre qu'on pourrait sauter cette Ã©tape
+# #on ferait juste une copie de nos Ã©chantillons et centre et rÃ©duit Ã§a pour directement passer Ã  la derniÃ¨re Ã©tape
 # 
-# #ouvrir le csv pour centrer et réduire les données 
+# #ouvrir le csv pour centrer et rÃ©duire les donnÃ©es 
 # 
 # csv=read.csv("SRFj_pts_extract_csv.csv",dec=".", sep = ';')
 # csv_scale=csv
