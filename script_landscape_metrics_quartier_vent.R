@@ -1,3 +1,5 @@
+## Réalisé par Maxime Paschal, maxime.paschal@gmail.com##
+
 #vider l'espace de travail
 rm(list=ls())
 
@@ -17,7 +19,7 @@ library(caret)
 library(FactoMineR)
 library(landscapemetrics)
 
-#répertorie de travail
+#rÃ©pertorie de travail
 
 WD="D:/Marans_S2_multidates/secteurs_vent_marans/juin_secteurs_vent_marans"
 setwd(WD)
@@ -28,7 +30,7 @@ carte=rast("D:/marans_S2_multidates/classifs_SRFmd/Classif_SRFmd7_marans_0_9773.
 plot(carte)
 
 
-####################Découper les cartes par rapport aux quartiers de vent###############################
+####################DÃ©couper les cartes par rapport aux quartiers de vent###############################
 
 nne=st_read("D:/Footprints_mensuels/Marans/footprint_marans_juin/NNE_marans_juin.shp")
 ene=st_read("D:/Footprints_mensuels/Marans/footprint_marans_juin/ENE_marans_juin.shp")
@@ -103,9 +105,9 @@ writeRaster(carte_nno,"carte_nno_marans_juin.tif",datatype="FLT8S", overwrite=T)
 
 #####################Calculer les pourcentages d'OS par quartier de vent################################
 
-liste_metrics=list_lsm() # listes des métriques qui existent
+liste_metrics=list_lsm() # listes des mÃ©triques qui existent
 as.data.frame(liste_metrics)
-liste_metrics #afficher les métriques disponibles 
+liste_metrics #afficher les mÃ©triques disponibles 
 
 
 
@@ -130,7 +132,7 @@ vent=c("NNE", "ENE", "ESE", "SSE", "SSO", "OSO", "ONO", "NNO")
 
 
 area_metrics_all_df=NULL # va recevoir toutes les metrics 
-#attention entre plusieurs utilisations il faut remettre � 0 le r�sultats sinon �a s'accumule
+#attention entre plusieurs utilisations il faut remettre à 0 le résultats sinon ça s'accumule
 
 for(i in 1:Num_image){
   
@@ -142,14 +144,14 @@ for(i in 1:Num_image){
   #ajouter le vent
   area_metrics_tmp_i$vent=vent[i]
   
-  #sauvegarder les metrics dans un data frame résultats
+  #sauvegarder les metrics dans un data frame rÃ©sultats
   area_metrics_all_df=rbind(area_metrics_all_df,area_metrics_tmp_i)
   
 }
 
 as.data.frame(area_metrics_all_df[1:Num_image,])
 
-area_metrics_all_df # afficher le résultats 
+area_metrics_all_df # afficher le rÃ©sultats 
 
 OS_vent=area_metrics_all_df[,c(3,6,7)] #on garde les colonnes class, value et vent
 OS_vent
