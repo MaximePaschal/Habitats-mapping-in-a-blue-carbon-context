@@ -1,3 +1,5 @@
+## Réalisé par Maxime Paschal, maxime.paschal@gmail.com##
+
 #vider l'espace de travail
 rm(list=ls())
 
@@ -15,7 +17,7 @@ library(randomForest)
 library(caret)
 library(FactoMineR)
 
-#répertorie de travail
+#rÃ©pertorie de travail
 
 WD="D:/img_sentinel_juillet/S2_20230705"
 setwd(WD)
@@ -46,7 +48,7 @@ vect_sf=st_transform(vect_sf,32630)
 
 
 
-#resample des bandes � 10 m  puis crop et mask,5;6;7;8A;11;12
+#resample des bandes à 10 m  puis crop et mask,5;6;7;8A;11;12
 
 bande_a_resample=B5
 bande_pix = bande_a_resample
