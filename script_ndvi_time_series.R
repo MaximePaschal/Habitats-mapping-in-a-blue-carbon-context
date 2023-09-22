@@ -1,3 +1,5 @@
+## Réalisé par Maxime Paschal, maxime.paschal@gmail.com##
+
 #vider l'espace de travail
 rm(list=ls())
 
@@ -42,14 +44,14 @@ library(caret)
 library(FactoMineR)
 library(landscapemetrics)
 
-#r�pertoire  de travail
+#répertoire  de travail
 
 WD="D:/sentinel_serie_temporelle_ndvi_esnandes/S2_esnandes_ndvi_moyen_mensuel"
 setwd(WD)
 getwd()
 
 
-#importer les donn�es 
+#importer les données 
 
 champs=st_read("D:/station_esnandes/mask_esnandes_vasiere_pre_sale_980m.shp")
 
@@ -65,7 +67,7 @@ avril=st_read("D:/Footprints_mensuels/Esnandes/footprint_esnandes_avril/esnandes
 mai=st_read("D:/Footprints_mensuels/Esnandes/footprint_esnandes_mai/esnandes_mai_secteurs_vent.shp")
 juin=st_read("D:/Footprints_mensuels/Esnandes/footprint_esnandes_juin/esnandes_juin_secteurs_vent.shp")
 
-#changer les sustèmes de projection
+#changer les sustÃ¨mes de projection
 champs=st_transform(champs, 32630)
 fevrier=st_transform(fevrier, 32630)
 mars=st_transform(mars, 32630)
